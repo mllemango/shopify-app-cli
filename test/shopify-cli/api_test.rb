@@ -126,19 +126,17 @@ module ShopifyCli
     def test_include_shopify_cli_header_if_shopifolk
       Shopifolk.act_as_shopifolk
 
+      stub_request(:post, 'https://my-test-shop.myshopify.com/admin/api/2019-04/graphql.json')
+        .with(body: File.read(File.join(FIXTURE_DIR, 'api/mutation.json')).tr("\n", ''),
+          headers: {
+            'X-Shopify-Cli-Employee' => '1',
+          })
+        .to_return(status: 200, body: '{}')
       File.stubs(:read)
         .with(File.join(ShopifyCli::ROOT, "lib/graphql/api/mutation.graphql"))
         .returns(@mutation)
 
-      require 'pry'; binding.pry
-      # ... make a request
-
-
-      assert headers.include("X-Shopify-CLI-Employee", "1")
-    end
-
-    def test_does_not_include_shopify_cli_header_if_not_shopifolk
-      refute headers.include("X-Shopify-CLI-Employee")
+      @api.query('api/mutation')
     end
   end
 end
