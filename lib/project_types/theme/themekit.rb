@@ -28,6 +28,16 @@ module Theme
         Tasks::EnsureThemekitInstalled.call(ctx)
       end
 
+      def generate_env(ctx, store:, password:, themeid:, env:)
+        command = build_command('configure', env)
+        command << "--password=#{password}"
+        command << "--store=#{store}"
+        command << "--themeid=#{themeid}"
+
+        stat = ctx.system(*command)
+        stat.success?
+      end
+
       def pull(ctx, store:, password:, themeid:, env:)
         command = build_command('get', env)
         command << "--password=#{password}"
@@ -45,6 +55,23 @@ module Theme
 
         stat = ctx.system(*command)
         stat.success?
+      end
+
+      def query_themes(ctx, store:, password:)
+        begin
+          resp = ::ShopifyCli::AdminAPI.rest_request(
+            ctx,
+            shop: store,
+            token: password,
+            path: "themes.json",
+          )
+        rescue ShopifyCli::API::APIRequestUnauthorizedError
+          ctx.abort('bad password')
+        rescue StandardError
+          ctx.abort('could not connect to given shop')
+        end
+
+        resp[1]['themes'].map { |theme| [theme['name'], theme['id']] }.to_h
       end
 
       def serve(ctx, env:)
