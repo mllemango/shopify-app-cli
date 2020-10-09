@@ -23,3 +23,9 @@ require 'fakefs/safe'
 require 'webmock/minitest'
 
 require 'mocha/minitest'
+require 'minitest/reporters'
+
+# reporter_options = { color: true }
+# Minitest::Reporters.use! [Minitest::Reporters::DefaultReporter.new(reporter_options)]
+# Minitest::Reporters.use! [Minitest::Reporters::DefaultReporter.new(reporter_options)]
+Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]

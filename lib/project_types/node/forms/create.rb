@@ -7,6 +7,7 @@ module Node
       flag_arguments :title, :organization_id, :shop_domain, :type
 
       def ask
+        puts "***2"
         self.title ||= CLI::UI::Prompt.ask(ctx.message('node.forms.create.app_name'))
         self.type = ask_type
         self.name = self.title.downcase.split(" ").join("_")

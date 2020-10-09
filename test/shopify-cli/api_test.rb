@@ -122,5 +122,23 @@ module ShopifyCli
       File.expects(:read).with(expected_path).returns('content')
       assert_equal(new_api.call_load_query('my_query'), 'content')
     end
+
+    def test_include_shopify_cli_header_if_shopifolk
+      Shopifolk.act_as_shopifolk
+
+      File.stubs(:read)
+        .with(File.join(ShopifyCli::ROOT, "lib/graphql/api/mutation.graphql"))
+        .returns(@mutation)
+
+      require 'pry'; binding.pry
+      # ... make a request
+
+
+      assert headers.include("X-Shopify-CLI-Employee", "1")
+    end
+
+    def test_does_not_include_shopify_cli_header_if_not_shopifolk
+      refute headers.include("X-Shopify-CLI-Employee")
+    end
   end
 end
