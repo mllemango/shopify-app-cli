@@ -192,8 +192,56 @@ module ShopifyCli
         assert_equal(form[:shop_domain], 'selected')
       end
 
-      def test_prompts_organizaton_preference
+      def test_perists_organization_preference_if_chosen
+        stub_partner_req(
+          'find_organization',
+          variables: { id: 123 },
+          resp: {
+            data: {
+              organizations: {
+                nodes: [
+                  {
+                    id: 123,
+                    stores: { nodes: [{ shopDomain: 'shopdomain.myshopify.com', 'transferDisabled': true }] },
+                  },
+                ],
+              },
+            },
+          }
+        )
+        CLI::UI::Prompt.stubs(:confirm).returns(true)
+        Shopifolk.expects(:act_as_shopifolk)
 
+        form = call(org_id: 123, shop: nil)
+
+        assert_equal(form[:organization_id], 123)
+        assert_equal(form[:shop_domain], 'shopdomain.myshopify.com')
+      end
+
+      def test_does_not_persist_organization_preference_if_not_chosen
+        stub_partner_req(
+          'find_organization',
+          variables: { id: 123 },
+          resp: {
+            data: {
+              organizations: {
+                nodes: [
+                  {
+                    id: 123,
+                    stores: { nodes: [{ shopDomain: 'shopdomain.myshopify.com', 'transferDisabled': true }] },
+                  },
+                ],
+              },
+            },
+          }
+        )
+        CLI::UI::Prompt.stubs(:confirm).returns(false)
+        Shopifolk.expects(:act_as_shopifolk).never
+
+        form = call(org_id: 123, shop: nil)
+
+        assert_equal(form[:organization_id], 123)
+        assert_equal(form[:shop_domain], 'shopdomain.myshopify.com')
       end
 
       private
