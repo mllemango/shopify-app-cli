@@ -426,7 +426,6 @@ module ShopifyCli
             yield
           end
         rescue Interrupt
-          puts "Exit C"
           exit(0)
         end
       end

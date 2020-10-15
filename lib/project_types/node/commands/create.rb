@@ -36,7 +36,6 @@ module Node
           puts api_client.inspect
         ShopifyCli::Resources::EnvFile.new(
           api_key: api_client["apiKey"],
-          #secret: "abcxyz",
           secret: api_client.fetch("apiSecretKeys").first["secret"],
           shop: form.shop_domain,
           scopes: 'write_products,write_customers,write_draft_orders',

@@ -56,7 +56,6 @@ module CLI
             # if it was `exit 30`, translate the exit code to 1, and submit nothing.
             # 30 is used to signal normal failures that are not indicative of bugs.
             # However, users should see it presented as 1.
-            puts "exit A"
             exit(1)
           else
             # A weird termination status happened. `error.exception "message"` will maintain backtrace

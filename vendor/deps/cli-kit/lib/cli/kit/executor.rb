@@ -64,7 +64,6 @@ module CLI
           $stderr.puts('SIGQUIT: quit')
           $stderr.puts(z)
         end
-        exit "B"
         exit(CLI::Kit::EXIT_FAILURE_BUT_NOT_BUG)
       end
 
