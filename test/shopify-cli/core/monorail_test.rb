@@ -6,7 +6,7 @@ module ShopifyCli
     class MonorailTest < MiniTest::Test
       def setup
         super
-        CLI::UI::Prompt.stubs(:confirm).returns(true)
+        CLI::UI::Prompt.stubs(:confirm).with("Do you want to run against the Shopify organization?", anything).returns(false)
         ShopifyCli::Core::Monorail.metadata = {}
       end
 
