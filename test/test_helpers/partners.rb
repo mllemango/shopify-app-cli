@@ -21,5 +21,12 @@ module TestHelpers
         variables: variables,
       }.to_json).to_return(status: status, body: resp.to_json)
     end
+
+    def stub_shopify_org_confirmation(response: true)
+      CLI::UI::Prompt
+        .stubs(:confirm)
+        .with("Do you want to run against the Shopify organization?", anything)
+        .returns(response)
+    end
   end
 end

@@ -44,7 +44,7 @@ module Node
       end
 
       def test_user_will_be_prompted_if_more_than_one_organization
-        CLI::UI::Prompt.stubs(:confirm).with("Do you want to run against the Shopify organization?", anything).returns(false)
+        stub_shopify_org_confirmation
         stub_partner_req(
           'all_organizations',
           resp: {
@@ -78,7 +78,7 @@ module Node
       end
 
       def test_will_auto_pick_with_only_one_org
-        CLI::UI::Prompt.stubs(:confirm).with("Do you want to run against the Shopify organization?", anything).returns(false)
+        stub_shopify_org_confirmation
         stub_partner_req(
           'all_organizations',
           resp: {
@@ -105,7 +105,7 @@ module Node
       end
 
       def test_organization_will_be_fetched_if_id_is_provided_but_not_shop
-        CLI::UI::Prompt.stubs(:confirm).with("Do you want to run against the Shopify organization?", anything).returns(false)
+        stub_shopify_org_confirmation
         stub_partner_req(
           'find_organization',
           variables: { id: 123 },
@@ -128,7 +128,7 @@ module Node
       end
 
       def test_it_will_fail_if_no_orgs_are_available
-        CLI::UI::Prompt.stubs(:confirm).with("Do you want to run against the Shopify organization?", anything).returns(false)
+        stub_shopify_org_confirmation
         stub_partner_req(
           'all_organizations',
           resp: { data: { organizations: { nodes: [] } } },
@@ -143,7 +143,7 @@ module Node
       end
 
       def test_returns_no_shop_if_none_are_available
-        CLI::UI::Prompt.stubs(:confirm).with("Do you want to run against the Shopify organization?", anything).returns(false)
+        stub_shopify_org_confirmation
         stub_partner_req(
           'find_organization',
           variables: { id: 123 },
@@ -166,7 +166,7 @@ module Node
       end
 
       def test_autopicks_only_shop
-        CLI::UI::Prompt.stubs(:confirm).with("Do you want to run against the Shopify organization?", anything).returns(false)
+        stub_shopify_org_confirmation
         stub_partner_req(
           'find_organization',
           variables: { id: 123 },
@@ -193,7 +193,7 @@ module Node
       end
 
       def test_prompts_user_to_pick_from_shops
-        CLI::UI::Prompt.stubs(:confirm).with("Do you want to run against the Shopify organization?", anything).returns(false)
+        stub_shopify_org_confirmation
         stub_partner_req(
           'find_organization',
           variables: { id: 123 },
