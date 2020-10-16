@@ -235,7 +235,7 @@ module ShopifyCli
             },
           }
         )
-        stub_shopify_org_confirmation
+        stub_shopify_org_confirmation(response: false)
         Shopifolk.expects(:act_as_shopifolk).never
 
         form = call(org_id: 123, shop: nil)

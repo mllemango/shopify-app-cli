@@ -184,6 +184,13 @@ module ShopifyCli
         ShopifyCli::Context.any_instance.stubs(:system?).returns(enabled)
         ShopifyCli::Config.stubs(:get_bool).with('analytics', 'enabled').returns(consented)
       end
+
+      def stub_shopify_org_confirmation(response: true)
+        CLI::UI::Prompt
+          .stubs(:confirm)
+          .with("Do you want to run against the Shopify organization?", anything)
+          .returns(response)
+      end
     end
   end
 end
