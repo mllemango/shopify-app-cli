@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require 'project_types/node/test_helper'
-require 'semantic/semantic'
 
 module Node
   module Commands
