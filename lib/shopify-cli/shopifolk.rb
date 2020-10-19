@@ -40,7 +40,7 @@ module ShopifyCli
     end
 
     def self.acting_as_shopifolk
-      @acting_as_shopifolk
+      @acting_as_shopifolk || (Project.has_current? && Project.current.config['shopifolk'])
     end
 
     ##
