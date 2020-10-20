@@ -66,9 +66,9 @@ module Theme
             path: "themes.json",
           )
         rescue ShopifyCli::API::APIRequestUnauthorizedError
-          ctx.abort('bad password')
+          ctx.abort(ctx.message('theme.themekit.query_themes.bad_password'))
         rescue StandardError
-          ctx.abort('could not connect to given shop')
+          ctx.abort(ctx.message('theme.themekit.query_themes.not_connect'))
         end
 
         resp[1]['themes'].map { |theme| [theme['name'], theme['id']] }.to_h
