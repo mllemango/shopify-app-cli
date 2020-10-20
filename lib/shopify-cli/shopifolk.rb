@@ -25,7 +25,6 @@ module ShopifyCli
       ShopifyCli::Shopifolk.new.shopifolk?
     end
 
-    # TODO check yaml to see if there's a current project
     def self.acting_as_shopifolk?
       ShopifyCli::Shopifolk.acting_as_shopifolk
     end

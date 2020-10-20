@@ -33,7 +33,6 @@ module Node
           type: form.type,
         )
 
-          puts api_client.inspect
         ShopifyCli::Resources::EnvFile.new(
           api_key: api_client["apiKey"],
           secret: api_client.fetch("apiSecretKeys").first["secret"],
