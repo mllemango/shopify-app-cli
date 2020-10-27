@@ -41,42 +41,45 @@ jobs:
         rpm=$(find . -type f -name "*.rpm")
         echo ::set-output name=deb_file::"${deb:2}"
         echo ::set-output name=rpm_file::"${rpm:2}"
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v${{ steps.tag.outputs.value }}
-        release_name: Release ${{ steps.tag.outputs.value }}
-        body: |
-          Changes in this Release
-          - Release of version ${{ steps.tag.outputs.value }} of the Shopify App CLI
-          - Please refer to [CHANGELOG](https://github.com/Shopify/shopify-app-cli/blob/master/CHANGELOG.md) for details.
-        draft: true
-        prerelease: false
+
+    - name: Create Release #https://cli.github.com/manual/gh_release_create
+      run: hub release create ${{ steps.tag.outputs.value }} [/home/runner/work/shopify-app-cli/shopify-app-cli/packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.deb_file }}, /home/runner/work/shopify-app-cli/shopify-app-cli/packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.rpm_file }}] -d -n "test"
+    # - name: Create Release
+    #   id: create_release
+    #   uses: actions/create-release@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     tag_name: ${{ steps.tag.outputs.value }}
+    #     release_name: Release ${{ steps.tag.outputs.value }}
+    #     body: |
+    #       Changes in this Release
+    #       - Release of version ${{ steps.tag.outputs.value }} of the Shopify App CLI
+    #       - Please refer to [CHANGELOG](https://github.com/Shopify/shopify-app-cli/blob/master/CHANGELOG.md) for details.
+    #     draft: true
+    #     prerelease: false
     
-    - name: Upload Release .deb
-      id: upload-release-asset 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, 
-        # referencing it's ID to get its outputs object, which include a `upload_url`. 
-        # See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: /home/runner/work/shopify-app-cli/shopify-app-cli/packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.deb_file }}
-        asset_name: ${{ steps.binaries.outputs.deb_file }}
-        asset_content_type: application/x-binary
+    # - name: Upload Release .deb
+    #   id: upload-release-asset 
+    #   uses: actions/upload-release-asset@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, 
+    #     # referencing it's ID to get its outputs object, which include a `upload_url`. 
+    #     # See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+    #     asset_path: /home/runner/work/shopify-app-cli/shopify-app-cli/packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.deb_file }}
+    #     asset_name: ${{ steps.binaries.outputs.deb_file }}
+    #     asset_content_type: application/x-binary
     
-    - name: Upload Release .rpm
-      id: upload-release-asset 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: /home/runner/work/shopify-app-cli/shopify-app-cli/packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.rpm_file }}
-        asset_name: ${{ steps.binaries.outputs.rpm_file }}
-        asset_content_type: application/x-binary
+    # - name: Upload Release .rpm
+    #   id: upload-release-asset 
+    #   uses: actions/upload-release-asset@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+    #     asset_path: /home/runner/work/shopify-app-cli/shopify-app-cli/packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.rpm_file }}
+    #     asset_name: ${{ steps.binaries.outputs.rpm_file }}
+    #     asset_content_type: application/x-binary
 
