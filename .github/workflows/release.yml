@@ -37,9 +37,10 @@ jobs:
         cd packaging/builds/${{ steps.folder.outputs.name }}
         echo $PWD
         find . -type f -name "*.deb"
-        debfile=$(find . -type f -name '*.deb')
-        echo ::set-output name=deb_file::"${debfile:2}"
-        echo ::set-output name=rpm_file::$(find . -type f -name "*.rpm")
+        deb=$(find . -type f -name '*.deb')
+        rpm=$(find . -type f -name "*.rpm")
+        echo ::set-output name=deb_file::"${deb:2}"
+        echo ::set-output name=rpm_file::"${rpm:2}"
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -55,7 +56,7 @@ jobs:
         draft: true
         prerelease: false
     
-    - name: Upload Release Asset
+    - name: Upload Release .deb
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1
       env:
@@ -67,3 +68,15 @@ jobs:
         asset_path: /home/runner/work/shopify-app-cli/shopify-app-cli/packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.deb_file }}
         asset_name: ${{ steps.binaries.outputs.deb_file }}
         asset_content_type: application/x-binary
+    
+    - name: Upload Release .rpm
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: /home/runner/work/shopify-app-cli/shopify-app-cli/packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.rpm_file }}
+        asset_name: ${{ steps.binaries.outputs.rpm_file }}
+        asset_content_type: application/x-binary
+
