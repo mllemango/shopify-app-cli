@@ -24,6 +24,7 @@ jobs:
     
     - name: finding packages...
       run: |
+        ls
         cd /github/workspace/packaging/builds/
         echo ::set-env name=version::$(ls)
         echo ::set-env name=deb_file::$(find . -type f -name "*.deb")
