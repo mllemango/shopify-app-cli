@@ -50,6 +50,7 @@ jobs:
         -a /home/runner/work/shopify-app-cli/shopify-app-cli/packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.deb_file }} \
         -a /home/runner/work/shopify-app-cli/shopify-app-cli/packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.rpm_file }} \
         -m "Version ${{ steps.folder.outputs.name }}
+        
         Release of version ${{ steps.folder.outputs.name }} of the Shopify App CLI
         Please refer to [CHANGELOG](https://github.com/Shopify/shopify-app-cli/blob/master/CHANGELOG.md) for details."
     # - name: Create Release
