@@ -47,8 +47,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         hub release create ${{ steps.tag.outputs.value }} \
-        [/home/runner/work/shopify-app-cli/shopify-app-cli/packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.deb_file }}, \
-        /home/runner/work/shopify-app-cli/shopify-app-cli/packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.rpm_file }}] \
+        -a /home/runner/work/shopify-app-cli/shopify-app-cli/packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.deb_file }} \
+        -a /home/runner/work/shopify-app-cli/shopify-app-cli/packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.rpm_file }} \
         -d -m "test"
     # - name: Create Release
     #   id: create_release
