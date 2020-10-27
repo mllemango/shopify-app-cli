@@ -9,6 +9,10 @@ jobs:
   create-release:
     runs-on: ubuntu-latest
     steps:
+    - name: Extract tag name
+        id: tag
+        run: |
+          echo "::set-output name=value::${GITHUB_REF##*/}"
     - uses: actions/checkout@v2
     
     - name: Set up Ruby
@@ -25,8 +29,11 @@ jobs:
     - name: finding packages...
       run: |
         cd packaging/builds/
+        ls
+        find . -type f -name "*.deb"
         echo ::set-env name=version::$(ls)
         echo ::set-env name=deb_file::$(find . -type f -name "*.deb")
+        ${{ steps.tag.outputs.value }}
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -37,8 +44,8 @@ jobs:
         release_name: Release ${{ env.version }}
         body: |
           Changes in this Release
-          - First Change
-          - Second Change
+          - Release of version ${{ env.version }} of the Shopify App CLI
+          - Please refer to [CHANGELOG](https://github.com/Shopify/shopify-app-cli/blob/master/CHANGELOG.md) for details.
         draft: true
         prerelease: false
     
@@ -51,6 +58,6 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, 
         # referencing it's ID to get its outputs object, which include a `upload_url`. 
         # See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ${{ env.deb_file }}
+        asset_path: /packaging/builds/${{ env.deb_file }}
         asset_name: ${{ env.deb_file }}
         asset_content_type: application/x-binary
