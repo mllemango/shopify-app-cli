@@ -24,15 +24,21 @@ jobs:
     
     - name: Create package
       run: bundle exec rake package
+
+    - name: finding directory...
+      id: folder
+      run: |
+        cd packaging/builds
+        echo ::set-output name=name::$(ls)
     
     - name: finding packages...
       id: binaries
       run: |
-        cd packaging/builds/
-        echo ::set-output name=folder::$(ls)
-        cd ${{ steps.binaries.outputs.folder }}
+        cd packaging/builds/${{ steps.folder.outputs.name }}
+        echo $PWD
         find . -type f -name "*.deb"
-        echo ::set-output name=deb_file::$(find . -type f -name "*.deb")
+        debfile=$(find . -type f -name '*.deb')
+        echo ::set-output name=deb_file::"${debfile:2}"
         echo ::set-output name=rpm_file::$(find . -type f -name "*.rpm")
     - name: Create Release
       id: create_release
@@ -58,6 +64,6 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, 
         # referencing it's ID to get its outputs object, which include a `upload_url`. 
         # See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: /packaging/builds/${{ steps.binaries.outputs.folder }}/${{ steps.binaries.outputs.deb_file }}
+        asset_path: /packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.deb_file }}
         asset_name: ${{ steps.binaries.outputs.deb_file }}
         asset_content_type: application/x-binary
