@@ -78,15 +78,15 @@ module ShopifyCli
       spec_contents = File.read(File.join(root_dir, 'shopify-cli.base.rb'))
       spec_contents = spec_contents.gsub('SHOPIFY_CLI_VERSION', ShopifyCli::VERSION)
 
-      puts "Grabbing sha256 checksum from Rubygems.org"
-      require 'digest/sha2'
-      require 'open-uri'
-      gem_checksum = open("https://rubygems.org/downloads/shopify-cli-#{ShopifyCli::VERSION}.gem") do |io|
-        Digest::SHA256.new.hexdigest(io.read)
-      end
+      # puts "Grabbing sha256 checksum from Rubygems.org"
+      # require 'digest/sha2'
+      # require 'open-uri'
+      # gem_checksum = open("https://rubygems.org/downloads/shopify-cli-#{ShopifyCli::VERSION}.gem") do |io|
+      #   Digest::SHA256.new.hexdigest(io.read)
+      # end
 
-      puts "Got sha256 checksum for gem: #{gem_checksum}"
-      spec_contents = spec_contents.gsub('SHOPIFY_CLI_GEM_CHECKSUM', gem_checksum)
+      # puts "Got sha256 checksum for gem: #{gem_checksum}"
+      # spec_contents = spec_contents.gsub('SHOPIFY_CLI_GEM_CHECKSUM', gem_checksum)
 
       puts "Writing generated formula\n  To: #{build_path}\n\n"
       File.write(build_path, spec_contents)
