@@ -28,7 +28,9 @@ jobs:
     - name: finding packages...
       id: binaries
       run: |
-        cd packaging/builds/${{ steps.tag.outputs.value }}
+        cd packaging/builds/
+        echo ::set-output name=folder::$(ls)
+        cd ${{ steps.binaries.outputs.folder }}
         find . -type f -name "*.deb"
         echo ::set-output name=deb_file::$(find . -type f -name "*.deb")
         echo ::set-output name=rpm_file::$(find . -type f -name "*.rpm")
@@ -56,6 +58,6 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, 
         # referencing it's ID to get its outputs object, which include a `upload_url`. 
         # See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: /packaging/builds/${{ steps.tag.outputs.value }}/${{ steps.binaries.outputs.deb_file }}
+        asset_path: /packaging/builds/${{ steps.binaries.outputs.folder }}/${{ steps.binaries.outputs.deb_file }}
         asset_name: ${{ steps.binaries.outputs.deb_file }}
         asset_content_type: application/x-binary
