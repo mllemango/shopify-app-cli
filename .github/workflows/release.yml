@@ -43,6 +43,8 @@ jobs:
         echo ::set-output name=rpm_file::"${rpm:2}"
 
     - name: Create Release #https://cli.github.com/manual/gh_release_create
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         hub release create ${{ steps.tag.outputs.value }} \
         [/home/runner/work/shopify-app-cli/shopify-app-cli/packaging/builds/${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.deb_file }}, \
