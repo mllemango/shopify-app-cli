@@ -44,10 +44,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        cd packaging/builds/
+        cd packaging/builds/${{ steps.folder.outputs.name }}
         hub release create ${{ steps.tag.outputs.value }} \
-        -a ${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.deb_file }} \
-        -a ${{ steps.folder.outputs.name }}/${{ steps.binaries.outputs.rpm_file }} \
+        -a ${{ steps.binaries.outputs.deb_file }} \
+        -a ${{ steps.binaries.outputs.rpm_file }} \
         -m "Version ${{ steps.folder.outputs.name }}
 
         Release of version ${{ steps.folder.outputs.name }} of the Shopify App CLI
