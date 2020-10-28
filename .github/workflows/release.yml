@@ -39,6 +39,26 @@ jobs:
         rpm=$(find . -type f -name "*.rpm")
         echo ::set-output name=deb_file::"${deb:2}"
         echo ::set-output name=rpm_file::"${rpm:2}"
+    
+    - name: get SHA value
+      id: revision
+      run: |
+        cd packaging/builds/${{ steps.folder.outputs.name }}
+        cat shopify-cli.rb
+        revision=$(grep 'sha256' shopify-cli.rb)
+        revision="${revision:10}"
+        revision="${revision::-1}"
+        echo $revision
+        echo ::set-output name=value::$revision
+
+    - uses: dawidd6/action-homebrew-bump-formula@v3
+      with:
+        token: ${{secrets.TOKEN}}
+        tap: shopify/homebrew-shopify
+        formula: shopify-cli
+        tag: ${{ steps.folder.outputs.name }}
+        message: "Test bump, created by github actions"
+        revision: ${{ steps.revision.outputs.value }}
 
     - name: Create Release # https://hub.github.com/hub-release.1.html
       env:
@@ -52,3 +72,12 @@ jobs:
 
         Release of version ${{ steps.folder.outputs.name }} of the Shopify App CLI
         Please refer to [CHANGELOG](https://github.com/Shopify/shopify-app-cli/blob/master/CHANGELOG.md) for details."
+
+      
+    # - name: Bump brew formula
+    #   run: |
+    #     brew tap Shopify/homebrew-shopify
+    #     brew bump-formula-pr -n --version=1.4.10 shopify-cli \
+    #     --sha256='489a6ade9925ca0953916cec1968ff733943c05d57ce09703e698d1defba5589' \
+    #     --url="https://rubygems.org/downloads/shopify-cli-1.0.0.gem"
+        
